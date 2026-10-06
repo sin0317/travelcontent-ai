@@ -6,7 +6,7 @@
 
 ## GitHub 仓库链接
 
-⚠️ 待填：https://github.com/<你的用户名>/travelcontent-ai
+https://github.com/sin0317/travelcontent-ai
 
 ## 作品简介
 
