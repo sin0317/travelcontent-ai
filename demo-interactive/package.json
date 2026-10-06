@@ -1,0 +1,12 @@
+{
+  "name": "travelcontent-ai-demo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "游纪 AI 旅行内容官 · 可交互在线 Demo（飞猪实时数据）",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@fly-ai/flyai-cli": "latest"
+  }
+}

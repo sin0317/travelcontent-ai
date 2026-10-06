@@ -32,14 +32,15 @@ sin0317（刘峻豪，个人参赛）
 
 ## 效果展示
 
-- **在线演示地址（公网可访问）**：https://travelcontent-ai.app.workbuddy.host/ —— 打开即见「开封 2 日游」真实产出（景点 + 酒店真实价格 + 短视频口播脚本），基于飞猪实时数据。
+- **在线交互 Demo（公网可访问，输入任意城市实时生成）**：https://travelcontent-ai.app.workbuddy.host/ —— 在页面输入目的地 + 天数（可选类别），实时调用飞猪数据生成「景点 + 酒店真实价格 + 短视频口播脚本」。已验证 开封 / 西安 / 杭州 等均返回飞猪实时真实数据。
+- 后端为 Node 服务（`demo-interactive/`）：`server.js` 调 `@fly-ai/flyai-cli` 取真实数据，`FLYAI_API_KEY` 仅在服务端、不暴露给前端。
 - 百炼运行截图：⚠️ 建议补充一张「在百炼 Managed Agent 中输入『开封 2 日游』并生成行程 + 脚本」的运行截图（部署步骤见 `agent/agent-config.md`）。
 - 真实数据示例（本地工程产出）：见仓库 `demo/sample_output.md` —— 开封 2 日游，含清明上河园、开封城墙等 4 个真实景点（地址 + 购票链接）+ 10 家真实酒店（含价格）。
 - 演示视频（强烈推荐）：⚠️ 待补充录屏。
 
 ## 项目链接与复现方式
 
-- **在线演示（公网）**：https://travelcontent-ai.app.workbuddy.host/
+- **在线交互 Demo（公网，可输入任意城市实时生成）**：https://travelcontent-ai.app.workbuddy.host/
 - GitHub 仓库：https://github.com/sin0317/travelcontent-ai
 - 本地复现步骤：
   1. `git clone https://github.com/sin0317/travelcontent-ai.git && cd travelcontent-ai`

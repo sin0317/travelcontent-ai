@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>游纪 · AI 旅行内容官 — 在线 Demo</title>
+<style>
+  :root{--bg:#0f1220;--card:#171b2e;--card2:#1d2238;--line:#2a3150;--txt:#eef1fb;--sub:#a9b1d0;--accent:#ff6a3d;--accent2:#4f8cff;--ok:#39d98a;--warn:#ffcf5c}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:radial-gradient(1200px 600px at 80% -10%,rgba(79,140,255,.18),transparent),radial-gradient(900px 500px at 0% 0%,rgba(255,106,61,.16),transparent),var(--bg);color:var(--txt);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:920px;margin:0 auto;padding:28px 18px 64px}
+  header{text-align:center;padding:24px 0 8px}
+  .badge{display:inline-block;font-size:12px;color:var(--accent);border:1px solid var(--line);background:var(--card);padding:4px 12px;border-radius:999px}
+  h1{font-size:32px;margin:12px 0 4px}h1 .en{color:var(--sub);font-size:18px;font-weight:500}
+  .lead{color:var(--sub);font-size:14px;max-width:620px;margin:0 auto}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin-top:22px}
+  .form{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
+  .field{display:flex;flex-direction:column;gap:5px}
+  .field label{font-size:12px;color:var(--sub)}
+  input,select{background:var(--card2);border:1px solid var(--line);color:var(--txt);border-radius:10px;padding:10px 12px;font-size:14px;min-width:120px}
+  input:focus,select:focus{outline:none;border-color:var(--accent2)}
+  button{cursor:pointer;background:linear-gradient(135deg,var(--accent),#ff8a5c);border:none;color:#1a1206;font-weight:700;font-size:14px;padding:11px 22px;border-radius:10px;transition:.15s}
+  button:hover{transform:translateY(-1px)}button:disabled{opacity:.6;cursor:not-allowed;transform:none}
+  .status{margin-top:12px;font-size:13px;color:var(--sub);min-height:18px}
+  .result{margin-top:18px;display:none}
+  .result.show{display:block}
+  .snap{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+  .pill{background:var(--card2);border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:12px}
+  .pill b{color:var(--accent)}
+  h3{font-size:15px;margin:18px 0 8px;border-left:3px solid var(--accent);padding-left:10px}
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+  .item{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:12px;overflow:hidden}
+  .item img{width:100%;height:120px;object-fit:cover;border-radius:8px;background:#0b0e18;display:block}
+  .item .nm{font-weight:700;font-size:14px;margin:8px 0 2px}
+  .item .mt{color:var(--sub);font-size:12px;min-height:32px}
+  .item a{display:inline-block;margin-top:8px;color:var(--accent2);text-decoration:none;font-size:13px}
+  .item .pr{float:right;color:var(--ok);font-weight:700}
+  .script{background:var(--card2);border:1px dashed var(--line);border-radius:12px;padding:16px;font-size:14px}
+  .script .ln{margin:8px 0}.script .k{color:var(--warn);font-weight:700}
+  .script blockquote{color:var(--sub);border-left:3px solid var(--accent2);padding-left:10px;margin:6px 0;font-style:italic}
+  .err{color:#ff7b7b;font-size:13px}
+  footer{margin-top:36px;text-align:center;color:var(--sub);font-size:12px;border-top:1px solid var(--line);padding-top:18px}
+  footer a{color:var(--accent2);text-decoration:none}
+  @media(max-width:680px){.grid{grid-template-columns:1fr}h1{font-size:26px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="badge">2026 飞猪 AI 旅行创新大赛 · 在线 Demo</span>
+    <h1>游纪 · AI 旅行内容官 <span class="en">TravelContent AI</span></h1>
+    <p class="lead">输入目的地，实时调用飞猪真实数据，生成「可执行行程 + 短视频口播脚本」。试试任意城市！</p>
+  </header>
+
+  <div class="panel">
+    <div class="form">
+      <div class="field"><label>目的地城市</label><input id="city" placeholder="如 开封 / 西安 / 杭州" value="开封" /></div>
+      <div class="field"><label>天数</label><input id="days" type="number" min="1" max="7" value="2" style="width:80px" /></div>
+      <div class="field"><label>类别（可选）</label>
+        <select id="category"><option value="">不限</option><option value="历史古迹">历史古迹</option><option value="自然风光">自然风光</option><option value="主题乐园">主题乐园</option><option value="人文古迹">人文古迹</option></select>
+      </div>
+      <button id="go">生成行程 + 脚本</button>
+    </div>
+    <div class="status" id="status"></div>
+  </div>
+
+  <div class="panel result" id="result">
+    <div class="snap" id="snap"></div>
+    <h3>推荐景点（飞猪实时）</h3>
+    <div class="grid" id="pois"></div>
+    <h3>推荐酒店（飞猪实时价格）</h3>
+    <div class="grid" id="hotels"></div>
+    <h3>短视频口播脚本（可直接拍）</h3>
+    <div class="script" id="script"></div>
+  </div>
+
+  <footer>
+    游纪 · AI 旅行内容官 · 2026 飞猪 AI 旅行创新大赛 · <a href="https://github.com/sin0317/travelcontent-ai" target="_blank" rel="noopener">sin0317/travelcontent-ai</a><br/>
+    基于飞猪实时数据生成 · 不暴露任何 API Key
+  </footer>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+$('go').onclick = async () => {
+  const city = $('city').value.trim();
+  const days = $('days').value || 2;
+  const category = $('category').value;
+  if (!city) { $('status').innerHTML = '<span class="err">请输入城市名</span>'; return; }
+  $('go').disabled = true;
+  $('status').textContent = '正在实时调用飞猪数据，请稍候…';
+  $('result').classList.remove('show');
+  try {
+    const r = await fetch('/api/generate', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ city, days, category })
+    });
+    const d = await r.json();
+    if (d.error) { $('status').innerHTML = '<span class="err">' + d.error + '</span>'; return; }
+    render(d);
+    $('status').textContent = '已生成 · 数据' + (d.poiReal && d.hotelReal ? '为飞猪实时返回' : '（trial 模式，价格脱敏）');
+  } catch (e) {
+    $('status').innerHTML = '<span class="err">请求失败：' + e.message + '</span>';
+  } finally { $('go').disabled = false; }
+};
+function esc(s){ return (s||'').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function render(d) {
+  $('snap').innerHTML =
+    '<span class="pill">景点 <b>' + d.poiCount + '</b></span>' +
+    '<span class="pill">酒店 <b>' + d.hotelCount + '</b></span>' +
+    '<span class="pill">城市 <b>' + esc(d.city) + '</b></span>';
+  $('pois').innerHTML = d.pois.map(p => (
+    '<div class="item">' +
+      (p.mainPic ? '<img src="' + esc(p.mainPic) + '" alt="" onerror="this.style.display=\'none\'">' : '') +
+      '<div class="nm">' + esc(p.name) + '</div>' +
+      '<div class="mt">' + esc(p.address || '') + '</div>' +
+      (p.jumpUrl ? '<a href="' + esc(p.jumpUrl) + '" target="_blank" rel="noopener">购票 / 详情</a>' : '') +
+    '</div>'
+  )).join('') || '<div class="mt">未获取到景点</div>';
+  $('hotels').innerHTML = d.hotels.map(h => (
+    '<div class="item">' +
+      (h.mainPic ? '<img src="' + esc(h.mainPic) + '" alt="" onerror="this.style.display=\'none\'">' : '') +
+      '<div class="nm">' + esc(h.name) + (h.price ? '<span class="pr">' + esc(h.price) + '</span>' : '') + '</div>' +
+      '<div class="mt">' + esc(h.star || '') + '</div>' +
+      (h.detailUrl ? '<a href="' + esc(h.detailUrl) + '" target="_blank" rel="noopener">查看 / 预订</a>' : '') +
+    '</div>'
+  )).join('') || '<div class="mt">未获取到酒店</div>';
+  const s = d.script;
+  $('script').innerHTML =
+    '<div class="ln"><span class="k">开场钩子：</span>' + esc(s.hook) + '</div>' +
+    '<blockquote>' + esc(s.day1) + '</blockquote>' +
+    '<div class="ln">' + esc(s.stay) + '</div>' +
+    '<div class="ln"><span class="k">结尾 CTA：</span>' + esc(s.cta) + '</div>';
+  $('result').classList.add('show');
+}
+</script>
+</body>
+</html>
