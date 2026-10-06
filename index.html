@@ -38,14 +38,18 @@
   .snap{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 18px}
   .pill{background:var(--card2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:13px}
   .pill b{color:var(--accent)}
-  h4{font-size:15px;margin:20px 0 10px;color:var(--txt);border-left:3px solid var(--accent);padding-left:10px}
+  h4{font-size:15px;margin:22px 0 10px;color:var(--txt);border-left:3px solid var(--accent);padding-left:10px}
+  h4.sub{border-color:var(--accent2);color:var(--sub)}
   ul.items{list-style:none}
   ul.items li{background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:11px 14px;margin:8px 0;font-size:14px}
   ul.items li .meta{color:var(--sub);font-size:13px}
   ul.items li a{color:var(--accent2);text-decoration:none;font-size:13px;margin-left:8px}
   ul.items li a:hover{text-decoration:underline}
-  .script{background:var(--card2);border:1px dashed var(--line);border-radius:12px;padding:18px;font-size:14px}
-  .script .line{margin:10px 0}
+  .script{background:var(--card2);border:1px dashed var(--line);border-radius:12px;padding:20px;font-size:14px}
+  .script .sec{margin:14px 0 6px;font-weight:700;color:var(--warn)}
+  .script .sec:first-child{margin-top:0}
+  .script .day-label{font-weight:700;color:var(--accent2);margin:12px 0 4px}
+  .script .line{margin:8px 0}
   .script .k{color:var(--warn);font-weight:700}
   .script blockquote{color:var(--sub);border-left:3px solid var(--accent2);padding-left:12px;margin:6px 0;font-style:italic}
   .note{color:var(--sub);font-size:13px;margin-top:10px}
@@ -60,9 +64,10 @@
   <header class="hero">
     <span class="badge">2026 飞猪 AI 旅行创新大赛 · 参赛作品</span>
     <h1>游纪 · AI 旅行内容官 <span class="en">TravelContent AI</span></h1>
-    <p class="lead">输入目的地 + 天数，基于<b style="color:var(--txt)">飞猪实时真实数据</b>，一键生成「可执行行程 + 可拍成短视频的旅行口播脚本」。真实数据，内容化输出，专为文旅与短视频创作人群打造。</p>
+    <p class="lead">输入目的地 + 天数，基于<b style="color:var(--txt)">飞猪实时真实数据</b>，<b style="color:var(--txt)">先输出短视频口播脚本</b>，再对齐脚本中的景点 / 酒店与补充资源。真实数据，内容化输出，专为文旅与短视频创作人群打造。</p>
     <div class="cta">
-      <a class="btn primary" href="https://github.com/sin0317/travelcontent-ai" target="_blank" rel="noopener">★ GitHub 仓库</a>
+      <a class="btn primary" href="https://travelcontent-ai.app.workbuddy.host/" target="_blank" rel="noopener">🚀 在线可交互 Demo</a>
+      <a class="btn" href="https://github.com/sin0317/travelcontent-ai" target="_blank" rel="noopener">★ GitHub 仓库</a>
       <a class="btn" href="https://opc.aliyun.com/feizhu" target="_blank" rel="noopener">大赛官网</a>
     </div>
   </header>
@@ -70,10 +75,10 @@
   <section>
     <div class="sec-h">核心能力</div>
     <div class="grid">
-      <div class="card"><h3><span class="tag">✓</span>真实数据底座</h3><p>景点 / 门票 / 酒店 / 机票全部来自飞猪 Fliggy MCP 实时返回，绝不臆造。</p></div>
-      <div class="card"><h3><span class="tag">✓</span>内容化输出（差异化）</h3><p>不止给列表，把真实数据编排成「行程 + 短视频口播脚本」，直连抖音 / B站 / 小红书创作流。</p></div>
-      <div class="card"><h3><span class="tag">✓</span>双形态交付</h3><p>阿里云百炼 Managed Agent（开箱即用）+ 本地可跑 Python 工程（零模型依赖，便于复现）。</p></div>
-      <div class="card"><h3><span class="tag">✓</span>文旅契合</h3><p>默认以历史古迹等类别切入，适配开封、西安、杭州等古城 / 文旅城市。</p></div>
+      <div class="card"><h3><span class="tag">✓</span>真实数据底座</h3><p>景点 / 门票 / 酒店全部来自飞猪 Fliggy MCP 实时返回，绝不臆造。</p></div>
+      <div class="card"><h3><span class="tag">✓</span>脚本优先（差异化）</h3><p>不止给列表，把真实数据编排成可直接拍的 60–90 秒口播脚本，直连抖音 / B站 / 小红书创作流。</p></div>
+      <div class="card"><h3><span class="tag">✓</span>脚本资源对齐</h3><p>脚本中提到的景点 / 酒店优先展示，其余作为补充推荐，信息结构贴合创作者查看习惯。</p></div>
+      <div class="card"><h3><span class="tag">✓</span>双形态交付</h3><p>阿里云百炼 Managed Agent（开箱即用）+ 本地可跑 Python / Node 工程（零模型依赖，便于复现）。</p></div>
     </div>
   </section>
 
@@ -81,36 +86,68 @@
     <div class="sec-h">真实产出演示 · 开封 2 日游</div>
     <div class="demo">
       <div class="snap">
-        <span class="pill">景点命中 <b>4</b> 个</span>
-        <span class="pill">酒店命中 <b>10</b> 个</span>
+        <span class="pill">脚本景点 <b>4</b> 个</span>
+        <span class="pill">脚本酒店 <b>2</b> 个</span>
+        <span class="pill">补充酒店 <b>8</b> 个</span>
         <span class="pill">数据来源 <b>飞猪实时</b></span>
       </div>
 
-      <h4>推荐景点（真实数据）</h4>
-      <ul class="items">
-        <li><b>开封城墙</b> <span class="meta">河南省开封市龙亭区西门大街198号</span><a href="https://router.feizhu.com/multi/webview?url=https%3A%2F%2Frouter.feizhu.com%2Fws%2F0sQUB6" target="_blank" rel="noopener">购票</a></li>
-        <li><b>山陕甘会馆</b> <span class="meta">河南省开封市龙亭区北书店街道徐府街85号附1号</span><a href="https://router.feizhu.com/multi/webview?url=https%3A%2F%2Frouter.feizhu.com%2Fws%2F2DJsBT" target="_blank" rel="noopener">购票</a></li>
-        <li><b>朱仙镇启封故园</b> <span class="meta">河南省开封市祥符区运粮河桥</span><a href="https://router.feizhu.com/multi/webview?url=https%3A%2F%2Frouter.feizhu.com%2Fws%2F3xP2Mw" target="_blank" rel="noopener">购票</a></li>
-        <li><b>刘家胡同</b> <span class="meta">河南省开封市顺河回族区</span><a href="https://router.feizhu.com/multi/webview?url=https%3A%2F%2Frouter.feizhu.com%2Fws%2F1yS12G" target="_blank" rel="noopener">购票</a></li>
-      </ul>
-
-      <h4>推荐酒店（真实价格）</h4>
-      <ul class="items">
-        <li><b>开封新东苑大酒店</b> <span class="meta">¥217</span><a href="https://router.feizhu.com/multi/webview?url=https%3A%2F%2Frouter.feizhu.com%2Fws%2F2YQCr0" target="_blank" rel="noopener">查看</a></li>
-        <li><b>开封尉氏县金沙湾国际酒店</b> <span class="meta">¥314</span><a href="https://router.feizhu.com/multi/webview?url=https%3A%2F%2Frouter.feizhu.com%2Fws%2F1nPvUT" target="_blank" rel="noopener">查看</a></li>
-        <li><b>建业思桐尚院民宿</b> <span class="meta">¥190</span><a href="https://router.feizhu.com/multi/webview?url=https%3A%2F%2Frouter.feizhu.com%2Fws%2F0q5mEC" target="_blank" rel="noopener">查看</a></li>
-        <li><b>开封清明上河园河南大学亚朵酒店</b> <span class="meta">¥399</span><a href="https://router.feizhu.com/multi/webview?url=https%3A%2F%2Frouter.feizhu.com%2Fws%2F4AlRP7" target="_blank" rel="noopener">查看</a></li>
-        <li><b>东景国际酒店（开封尉氏开发区店）</b> <span class="meta">¥290</span><a href="https://router.feizhu.com/multi/webview?url=https%3A%2F%2Frouter.feizhu.com%2Fws%2F3EQ1Bl" target="_blank" rel="noopener">查看</a></li>
-      </ul>
-
-      <h4>短视频口播脚本（可直接拍）</h4>
+      <h4>短视频口播脚本（可直接拍 · 约 60–90 秒）</h4>
       <div class="script">
-        <div class="line"><span class="k">开场钩子（0-5s）：</span>"开封到底怎么玩才不踩坑？收藏这条，2天帮你安排得明明白白。"</div>
-        <blockquote>第 1 天 · 主打开封城墙、朱仙镇启封故园——实拍打卡 + 飞猪购票链接放评论区，边玩边省。</blockquote>
-        <blockquote>第 2 天 · 主打山陕甘会馆、刘家胡同——实拍打卡 + 飞猪购票链接放评论区，边玩边省。</blockquote>
-        <div class="line"><span class="k">住哪儿：</span>开封新东苑大酒店、金沙湾国际酒店、建业思桐尚院民宿 都是飞猪高分推荐，链接同款放评论区。</div>
-        <div class="line"><span class="k">结尾 CTA（最后 5s）：</span>"数据来自飞猪实时库存，价格随时变，点我主页看更多开封玩法。"</div>
+        <div class="sec">开场钩子（0–6s）</div>
+        <div class="line">“来 开封 玩了 2 天，发现 90% 的人都去错了地方。这条视频帮你把 开封 最好拍、最不踩坑的点一次说清，收藏了直接照着走。”</div>
+
+        <div class="sec">行程主线</div>
+        <div class="day-label">第 1 天</div>
+        <div class="line"><span class="k">上午 · 开封城墙</span></div>
+        <blockquote>“第一站 开封城墙。这里不光出片，关键是 开封 的本地氛围特别浓。建议早上 9 点前到，避开人流，拍一组空镜开场。飞猪购票链接我放评论区了，提前买能省不少排队时间。”</blockquote>
+        <div class="line">镜头建议：大门空镜 + 人物背影入画 + 标志性机位特写。</div>
+        <div class="line"><span class="k">下午 · 朱仙镇启封故园</span></div>
+        <blockquote>“下午去 朱仙镇启封故园，和上午形成对比。这条路线是我按距离和光线排好的，拍完中午还能顺路吃饭。想要同款路线可以直接在评论区拿。”</blockquote>
+        <div class="line">镜头建议：路途中转场镜头 + 第二站全景 + 人物互动/打卡动作。</div>
+        <div class="line"><span class="k">转场：</span>“第 1 天先这样，第 2 天我带你们去 开封 另一个更值得拍的点。”</div>
+
+        <div class="day-label">第 2 天</div>
+        <div class="line"><span class="k">上午 · 山陕甘会馆</span></div>
+        <blockquote>“第一站 山陕甘会馆。这里不光出片，关键是 开封 的本地氛围特别浓。建议早上 9 点前到，避开人流，拍一组空镜开场。飞猪购票链接我放评论区了，提前买能省不少排队时间。”</blockquote>
+        <div class="line">镜头建议：大门空镜 + 人物背影入画 + 标志性机位特写。</div>
+        <div class="line"><span class="k">下午 · 刘家胡同</span></div>
+        <blockquote>“下午去 刘家胡同，和上午形成对比。这条路线是我按距离和光线排好的，拍完中午还能顺路吃饭。想要同款路线可以直接在评论区拿。”</blockquote>
+        <div class="line">镜头建议：路途中转场镜头 + 第二站全景 + 人物互动/打卡动作。</div>
+
+        <div class="sec">住哪儿</div>
+        <div class="line">“住宿我推荐 开封新东苑大酒店、开封尉氏县金沙湾国际酒店，都是飞猪高分且离上面这些点比较方便的酒店。价格会随日期浮动，评论区放了同款链接，订之前可以比价。”</div>
+
+        <div class="sec">结尾 CTA（最后 5s）</div>
+        <div class="line">“好了，这份 开封 2 天攻略里的景点、酒店、路线全来自飞猪实时数据。评论区有购票和酒店同款链接，出发前再确认一次价格。点我主页，还有更多城市的 AI 旅行脚本。”</div>
       </div>
+
+      <h4>脚本中提到的景点（飞猪实时）</h4>
+      <ul class="items">
+        <li><b>开封城墙</b> <span class="meta">河南省开封市龙亭区西门大街198号</span><a href="https://router.feizhu.com/multi/webview?url=https%3A%2F%2Frouter.feizhu.com%2Fws%2F37XQj0" target="_blank" rel="noopener">购票</a></li>
+        <li><b>朱仙镇启封故园</b> <span class="meta">河南省开封市祥符区运粮河桥</span><a href="https://router.feizhu.com/multi/webview?url=https%3A%2F%2Frouter.feizhu.com%2Fws%2F32KWnh" target="_blank" rel="noopener">购票</a></li>
+        <li><b>山陕甘会馆</b> <span class="meta">河南省开封市龙亭区北书店街道徐府街85号附1号</span><a href="https://router.feizhu.com/multi/webview?url=https%3A%2F%2Frouter.feizhu.com%2Fws%2F0YLqeV" target="_blank" rel="noopener">购票</a></li>
+        <li><b>刘家胡同</b> <span class="meta">河南省开封市顺河回族区</span><a href="https://router.feizhu.com/multi/webview?url=https%3A%2F%2Frouter.feizhu.com%2Fws%2F1NgMQ0" target="_blank" rel="noopener">购票</a></li>
+      </ul>
+
+      <h4>脚本中提到的酒店（飞猪实时价格）</h4>
+      <ul class="items">
+        <li><b>开封新东苑大酒店</b> <span class="meta">¥217</span><a href="https://router.feizhu.com/multi/webview?url=https%3A%2F%2Frouter.feizhu.com%2Fws%2F2umhv1" target="_blank" rel="noopener">查看</a></li>
+        <li><b>开封尉氏县金沙湾国际酒店</b> <span class="meta">¥314</span><a href="https://router.feizhu.com/multi/webview?url=https%3A%2F%2Frouter.feizhu.com%2Fws%2F1PIF8f" target="_blank" rel="noopener">查看</a></li>
+      </ul>
+
+      <h4 class="sub">补充酒店</h4>
+      <ul class="items">
+        <li><b>建业思桐尚院民宿</b> <span class="meta">¥190</span><a href="https://router.feizhu.com/multi/webview?url=https%3A%2F%2Frouter.feizhu.com%2Fws%2F2ILptw" target="_blank" rel="noopener">查看</a></li>
+        <li><b>开封清明上河园河南大学亚朵酒店</b> <span class="meta">¥383</span><a href="https://router.feizhu.com/multi/webview?url=https%3A%2F%2Frouter.feizhu.com%2Fws%2F4LKL6Z" target="_blank" rel="noopener">查看</a></li>
+        <li><b>东景国际酒店（开封尉氏开发区店）</b> <span class="meta">¥290</span><a href="https://router.feizhu.com/multi/webview?url=https%3A%2F%2Frouter.feizhu.com%2Fws%2F41vZAM" target="_blank" rel="noopener">查看</a></li>
+        <li><b>兰考中州华悦饭店</b> <span class="meta">¥308</span><a href="https://router.feizhu.com/multi/webview?url=https%3A%2F%2Frouter.feizhu.com%2Fws%2F2wQz4A" target="_blank" rel="noopener">查看</a></li>
+        <li><b>开封博物馆郑开大道亚朵酒店（V3.6）</b> <span class="meta">¥342</span><a href="https://router.feizhu.com/multi/webview?url=https%3A%2F%2Frouter.feizhu.com%2Fws%2F3c0n1I" target="_blank" rel="noopener">查看</a></li>
+        <li><b>欢致酒店（开封鼓楼广场店）</b> <span class="meta">¥299</span><a href="https://router.feizhu.com/multi/webview?url=https%3A%2F%2Frouter.feizhu.com%2Fws%2F2NWnLa" target="_blank" rel="noopener">查看</a></li>
+        <li><b>陌上轻雅酒店（开封火车站店）</b> <span class="meta">¥223</span><a href="https://router.feizhu.com/multi/webview?url=https%3A%2F%2Frouter.feizhu.com%2Fws%2F1g6vSk" target="_blank" rel="noopener">查看</a></li>
+        <li><b>开封兰考干部学院桔子水晶酒店</b> <span class="meta">¥262</span><a href="https://router.feizhu.com/multi/webview?url=https%3A%2F%2Frouter.feizhu.com%2Fws%2F36WpIK" target="_blank" rel="noopener">查看</a></li>
+      </ul>
+
       <p class="note">↑ 以上为「游纪」基于飞猪实时数据自动生成的真实示例。接入百炼大模型后，口播脚本可升级为更具个性化的 AI 生成版本。</p>
     </div>
   </section>
@@ -119,12 +156,20 @@
     <div class="sec-h">如何运行 / 复现</div>
     <div class="grid">
       <div class="card">
+        <h3>在线可交互 Demo</h3>
+        <p>打开 <a href="https://travelcontent-ai.app.workbuddy.host/" target="_blank" rel="noopener" style="color:var(--accent2)">travelcontent-ai.app.workbuddy.host</a>，输入任意城市即可实时生成脚本 + 脚本资源 + 补充资源。</p>
+      </div>
+      <div class="card">
         <h3>本地工程（零模型依赖）</h3>
         <p>① <code>git clone</code> 仓库 → ② <code>npm i @fly-ai/flyai-cli</code> → ③ 填 <code>FLYAI_API_KEY</code> 到 <code>.env</code> → ④ <code>python src/cli.py 开封 --days 2 --category 历史古迹</code></p>
       </div>
       <div class="card">
         <h3>阿里云百炼 Managed Agent</h3>
         <p>装 <code>alibaba-flyai/flyai-skill</code> → 贴 <code>prompts/system_prompt.md</code> → 配 <code>FLYAI_API_KEY</code> → 直接对话产出行程 + 脚本。详见 <code>agent/agent-config.md</code>。</p>
+      </div>
+      <div class="card">
+        <h3>Node 交互服务</h3>
+        <p>进入 <code>demo-interactive/</code>，<code>npm install && node server.js</code>，访问 <code>http://localhost:3000</code> 即可本地体验。</p>
       </div>
     </div>
   </section>

@@ -8,7 +8,7 @@
   :root{--bg:#0f1220;--card:#171b2e;--card2:#1d2238;--line:#2a3150;--txt:#eef1fb;--sub:#a9b1d0;--accent:#ff6a3d;--accent2:#4f8cff;--ok:#39d98a;--warn:#ffcf5c}
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:radial-gradient(1200px 600px at 80% -10%,rgba(79,140,255,.18),transparent),radial-gradient(900px 500px at 0% 0%,rgba(255,106,61,.16),transparent),var(--bg);color:var(--txt);line-height:1.6;-webkit-font-smoothing:antialiased}
-  .wrap{max-width:920px;margin:0 auto;padding:28px 18px 64px}
+  .wrap{max-width:960px;margin:0 auto;padding:28px 18px 64px}
   header{text-align:center;padding:24px 0 8px}
   .badge{display:inline-block;font-size:12px;color:var(--accent);border:1px solid var(--line);background:var(--card);padding:4px 12px;border-radius:999px}
   h1{font-size:32px;margin:12px 0 4px}h1 .en{color:var(--sub);font-size:18px;font-weight:500}
@@ -27,7 +27,8 @@
   .snap{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
   .pill{background:var(--card2);border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:12px}
   .pill b{color:var(--accent)}
-  h3{font-size:15px;margin:18px 0 8px;border-left:3px solid var(--accent);padding-left:10px}
+  h3{font-size:15px;margin:22px 0 10px;border-left:3px solid var(--accent);padding-left:10px}
+  h3.sub{border-color:var(--accent2);color:var(--sub)}
   .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
   .item{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:12px;overflow:hidden}
   .item img{width:100%;height:120px;object-fit:cover;border-radius:8px;background:#0b0e18;display:block}
@@ -35,9 +36,15 @@
   .item .mt{color:var(--sub);font-size:12px;min-height:32px}
   .item a{display:inline-block;margin-top:8px;color:var(--accent2);text-decoration:none;font-size:13px}
   .item .pr{float:right;color:var(--ok);font-weight:700}
-  .script{background:var(--card2);border:1px dashed var(--line);border-radius:12px;padding:16px;font-size:14px}
-  .script .ln{margin:8px 0}.script .k{color:var(--warn);font-weight:700}
+  .script{background:var(--card2);border:1px dashed var(--line);border-radius:12px;padding:18px;font-size:14px}
+  .script .sec{margin:14px 0 8px;font-weight:700;color:var(--warn)}
+  .script .sec:first-child{margin-top:0}
+  .script .day-label{font-weight:700;color:var(--accent2);margin:12px 0 4px}
+  .script .ln{margin:6px 0;line-height:1.7}
+  .script .k{color:var(--warn);font-weight:700}
+  .script .tag{display:inline-block;background:rgba(79,140,255,.12);color:var(--accent2);font-size:12px;padding:2px 8px;border-radius:6px;margin-right:6px}
   .script blockquote{color:var(--sub);border-left:3px solid var(--accent2);padding-left:10px;margin:6px 0;font-style:italic}
+  .empty{color:var(--sub);font-size:13px;padding:8px 0}
   .err{color:#ff7b7b;font-size:13px}
   footer{margin-top:36px;text-align:center;color:var(--sub);font-size:12px;border-top:1px solid var(--line);padding-top:18px}
   footer a{color:var(--accent2);text-decoration:none}
@@ -49,7 +56,7 @@
   <header>
     <span class="badge">2026 飞猪 AI 旅行创新大赛 · 在线 Demo</span>
     <h1>游纪 · AI 旅行内容官 <span class="en">TravelContent AI</span></h1>
-    <p class="lead">输入目的地，实时调用飞猪真实数据，生成「可执行行程 + 短视频口播脚本」。试试任意城市！</p>
+    <p class="lead">输入目的地，实时调用飞猪真实数据，先生成「短视频口播脚本」，再对齐脚本中的景点与酒店。试试任意城市！</p>
   </header>
 
   <div class="panel">
@@ -66,12 +73,21 @@
 
   <div class="panel result" id="result">
     <div class="snap" id="snap"></div>
-    <h3>推荐景点（飞猪实时）</h3>
-    <div class="grid" id="pois"></div>
-    <h3>推荐酒店（飞猪实时价格）</h3>
-    <div class="grid" id="hotels"></div>
+
     <h3>短视频口播脚本（可直接拍）</h3>
     <div class="script" id="script"></div>
+
+    <h3>脚本中提到的景点</h3>
+    <div class="grid" id="scriptPois"></div>
+
+    <h3>脚本中提到的酒店</h3>
+    <div class="grid" id="scriptHotels"></div>
+
+    <h3 class="sub">补充景点</h3>
+    <div class="grid" id="extraPois"></div>
+
+    <h3 class="sub">补充酒店</h3>
+    <div class="grid" id="extraHotels"></div>
   </div>
 
   <footer>
@@ -104,33 +120,65 @@ $('go').onclick = async () => {
   } finally { $('go').disabled = false; }
 };
 function esc(s){ return (s||'').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function cardPoi(p) {
+  return '<div class="item">' +
+    (p.mainPic ? '<img src="' + esc(p.mainPic) + '" alt="" onerror="this.style.display=\'none\'">' : '') +
+    '<div class="nm">' + esc(p.name) + '</div>' +
+    '<div class="mt">' + esc(p.address || '') + '</div>' +
+    (p.jumpUrl ? '<a href="' + esc(p.jumpUrl) + '" target="_blank" rel="noopener">购票 / 详情</a>' : '') +
+  '</div>';
+}
+function cardHotel(h) {
+  return '<div class="item">' +
+    (h.mainPic ? '<img src="' + esc(h.mainPic) + '" alt="" onerror="this.style.display=\'none\'">' : '') +
+    '<div class="nm">' + esc(h.name) + (h.price ? '<span class="pr">' + esc(h.price) + '</span>' : '') + '</div>' +
+    '<div class="mt">' + esc(h.star || '') + '</div>' +
+    (h.detailUrl ? '<a href="' + esc(h.detailUrl) + '" target="_blank" rel="noopener">查看 / 预订</a>' : '') +
+  '</div>';
+}
+function gridHtml(items, cardFn, emptyText) {
+  if (!items || items.length === 0) return '<div class="empty">' + emptyText + '</div>';
+  return '<div class="grid">' + items.map(cardFn).join('') + '</div>';
+}
 function render(d) {
   $('snap').innerHTML =
-    '<span class="pill">景点 <b>' + d.poiCount + '</b></span>' +
-    '<span class="pill">酒店 <b>' + d.hotelCount + '</b></span>' +
+    '<span class="pill">脚本景点 <b>' + (d.scriptPois ? d.scriptPois.length : 0) + '</b></span>' +
+    '<span class="pill">脚本酒店 <b>' + (d.scriptHotels ? d.scriptHotels.length : 0) + '</b></span>' +
+    '<span class="pill">补充 <b>' + ((d.extraPois ? d.extraPois.length : 0) + (d.extraHotels ? d.extraHotels.length : 0)) + '</b></span>' +
     '<span class="pill">城市 <b>' + esc(d.city) + '</b></span>';
-  $('pois').innerHTML = d.pois.map(p => (
-    '<div class="item">' +
-      (p.mainPic ? '<img src="' + esc(p.mainPic) + '" alt="" onerror="this.style.display=\'none\'">' : '') +
-      '<div class="nm">' + esc(p.name) + '</div>' +
-      '<div class="mt">' + esc(p.address || '') + '</div>' +
-      (p.jumpUrl ? '<a href="' + esc(p.jumpUrl) + '" target="_blank" rel="noopener">购票 / 详情</a>' : '') +
-    '</div>'
-  )).join('') || '<div class="mt">未获取到景点</div>';
-  $('hotels').innerHTML = d.hotels.map(h => (
-    '<div class="item">' +
-      (h.mainPic ? '<img src="' + esc(h.mainPic) + '" alt="" onerror="this.style.display=\'none\'">' : '') +
-      '<div class="nm">' + esc(h.name) + (h.price ? '<span class="pr">' + esc(h.price) + '</span>' : '') + '</div>' +
-      '<div class="mt">' + esc(h.star || '') + '</div>' +
-      (h.detailUrl ? '<a href="' + esc(h.detailUrl) + '" target="_blank" rel="noopener">查看 / 预订</a>' : '') +
-    '</div>'
-  )).join('') || '<div class="mt">未获取到酒店</div>';
+
+  // 脚本渲染
   const s = d.script;
-  $('script').innerHTML =
-    '<div class="ln"><span class="k">开场钩子：</span>' + esc(s.hook) + '</div>' +
-    '<blockquote>' + esc(s.day1) + '</blockquote>' +
-    '<div class="ln">' + esc(s.stay) + '</div>' +
-    '<div class="ln"><span class="k">结尾 CTA：</span>' + esc(s.cta) + '</div>';
+  let scriptHtml = '<div class="sec">开场钩子</div>' +
+    '<div class="ln"><span class="tag">0–6s</span>' + esc(s.hook) + '</div>';
+  scriptHtml += '<div class="sec">行程主线</div>';
+  for (const day of s.days) {
+    scriptHtml += '<div class="day-label">第 ' + day.day + ' 天</div>';
+    if (day.morning) {
+      scriptHtml += '<div class="ln"><span class="k">上午 · ' + esc(day.morning.name) + '</span></div>' +
+        '<blockquote>“第一站 ' + esc(day.morning.name) + '。这里不光出片，关键是 ' + esc(d.city) + ' 的本地氛围特别浓。建议早上 9 点前到，避开人流，拍一组空镜开场。飞猪购票链接我放评论区了，提前买能省不少排队时间。”</blockquote>' +
+        '<div class="ln">镜头建议：大门空镜 + 人物背影入画 + 标志性机位特写。</div>';
+    }
+    if (day.afternoon) {
+      scriptHtml += '<div class="ln"><span class="k">下午 · ' + esc(day.afternoon.name) + '</span></div>' +
+        '<blockquote>“下午去 ' + esc(day.afternoon.name) + '，和上午形成对比。这条路线是我按距离和光线排好的，拍完中午还能顺路吃饭。想要同款路线可以直接在评论区拿。”</blockquote>' +
+        '<div class="ln">镜头建议：路途中转场镜头 + 第二站全景 + 人物互动/打卡动作。</div>';
+    }
+    if (day.transition) {
+      scriptHtml += '<div class="ln"><span class="k">转场：</span>' + esc(day.transition) + '</div>';
+    }
+  }
+  scriptHtml += '<div class="sec">住哪儿</div><div class="ln">' + esc(s.stay) + '</div>';
+  scriptHtml += '<div class="sec">结尾 CTA（最后 5s）</div>' +
+    '<div class="ln"><span class="tag">结尾</span>' + esc(s.cta) + '</div>';
+  $('script').innerHTML = scriptHtml;
+
+  // 资源卡片
+  $('scriptPois').innerHTML = gridHtml(d.scriptPois, cardPoi, '暂无脚本景点');
+  $('scriptHotels').innerHTML = gridHtml(d.scriptHotels, cardHotel, '暂无脚本酒店');
+  $('extraPois').innerHTML = gridHtml(d.extraPois, cardPoi, '暂无补充景点');
+  $('extraHotels').innerHTML = gridHtml(d.extraHotels, cardHotel, '暂无补充酒店');
+
   $('result').classList.add('show');
 }
 </script>

@@ -72,27 +72,61 @@ function runFlyai(args, timeoutMs = 25000) {
 function itemsOf(r) { return (r && r.obj && r.obj.data && r.obj.data.itemList) || []; }
 
 function buildScript(city, days, pois, hotels) {
-  const top = pois.slice(0, 2).map((p) => p.name).join('、');
-  const stay = hotels.slice(0, 3).map((h) => h.name).join('、');
+  // 每天前 2 个景点进脚本，其余补充
+  const daily = [];
+  for (let d = 1; d <= days; d++) {
+    const dayPois = pois.filter((_, i) => i % days === (d - 1));
+    const scriptSpots = dayPois.slice(0, 2);
+    daily.push({
+      day: d,
+      morning: scriptSpots[0] || null,
+      afternoon: scriptSpots[1] || null,
+      transition: d < days
+        ? `“第 ${d} 天先这样，第 ${d + 1} 天我带你们去 ${city} 另一个更值得拍的点。”`
+        : '',
+    });
+  }
+
+  const scriptHotels = hotels.slice(0, 2);
+  const stayNames = scriptHotels.map((h) => h.name).join('、');
+  const stay = stayNames
+    ? `“住宿我推荐 ${stayNames}，都是飞猪高分且离上面这些点比较方便的酒店。价格会随日期浮动，评论区放了同款链接，订之前可以比价。”`
+    : `“住宿建议选在市中心或景区沿线，飞猪上按评分排序挑高分酒店，同款链接放评论区。”`;
+
   return {
-    hook: `${city}到底怎么玩才不踩坑？收藏这条，${days}天帮你安排得明明白白。`,
-    day1: `主打开${top || city + '核心景点'}——实拍打卡 + 飞猪购票链接放评论区，边玩边省。`,
-    stay: stay ? `住哪儿：${stay} 都是飞猪高分推荐，链接同款放评论区。` : `住哪儿：飞猪高分酒店推荐，链接放评论区。`,
-    cta: `数据来自飞猪实时库存，价格随时变，点我主页看更多${city}玩法。`,
+    hook: `“来 ${city} 玩了 ${days} 天，发现 90% 的人都去错了地方。这条视频帮你把 ${city} 最好拍、最不踩坑的点一次说清，收藏了直接照着走。”`,
+    days: daily,
+    stay,
+    cta: `“好了，这份 ${city} ${days} 天攻略里的景点、酒店、路线全来自飞猪实时数据。评论区有购票和酒店同款链接，出发前再确认一次价格。点我主页，还有更多城市的 AI 旅行脚本。”`,
   };
 }
 
 function renderResult(city, days, category, poiRes, hotelRes) {
   const pois = itemsOf(poiRes);
   const hotels = itemsOf(hotelRes);
+
+  // 按天拆分脚本景点与补充景点
+  const scriptPois = [];
+  const extraPois = [];
+  for (let d = 1; d <= days; d++) {
+    const dayPois = pois.filter((_, i) => i % days === (d - 1));
+    scriptPois.push(...dayPois.slice(0, 2));
+    extraPois.push(...dayPois.slice(2));
+  }
+
+  const scriptHotels = hotels.slice(0, 2);
+  const extraHotels = hotels.slice(2, 8);
+
   return {
     city, days, category,
     poiCount: pois.length,
     hotelCount: hotels.length,
     poiReal: poiRes.ok,
     hotelReal: hotelRes.ok,
-    pois: pois.slice(0, 6).map((p) => ({ name: p.name, address: p.address, jumpUrl: p.jumpUrl, mainPic: p.mainPic })),
-    hotels: hotels.slice(0, 8).map((h) => ({ name: h.name, price: h.price, detailUrl: h.detailUrl, mainPic: h.mainPic, star: h.star })),
+    scriptPois: scriptPois.slice(0, 14).map((p) => ({ name: p.name, address: p.address, jumpUrl: p.jumpUrl, mainPic: p.mainPic })),
+    scriptHotels: scriptHotels.map((h) => ({ name: h.name, price: h.price, detailUrl: h.detailUrl, mainPic: h.mainPic, star: h.star })),
+    extraPois: extraPois.slice(0, 12).map((p) => ({ name: p.name, address: p.address, jumpUrl: p.jumpUrl, mainPic: p.mainPic })),
+    extraHotels: extraHotels.map((h) => ({ name: h.name, price: h.price, detailUrl: h.detailUrl, mainPic: h.mainPic, star: h.star })),
     script: buildScript(city, days, pois, hotels),
   };
 }

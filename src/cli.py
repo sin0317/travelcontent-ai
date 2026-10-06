@@ -1,4 +1,4 @@
-"""命令行入口：一键生成「行程 + 视频脚本」。
+"""命令行入口：一键生成「脚本 → 脚本提到资源 → 补充资源」。
 
 用法：
     python src/cli.py 开封 --days 2 --category 历史古迹
@@ -34,6 +34,51 @@ from src.planner import build_itinerary  # noqa: E402
 from src.content_gen import gen_script  # noqa: E402
 
 
+def _item_name(item: dict) -> str:
+    return item.get("name") or (item.get("info") or {}).get("title") or ""
+
+
+def _item_address(item: dict) -> str:
+    return item.get("address") or (item.get("info") or {}).get("address") or ""
+
+
+def _item_url(item: dict) -> str:
+    return (
+        item.get("jumpUrl")
+        or item.get("detailUrl")
+        or (item.get("info") or {}).get("jumpUrl")
+        or (item.get("info") or {}).get("detailUrl")
+        or ""
+    )
+
+
+def _item_price(item: dict) -> str:
+    return item.get("price") or (item.get("info") or {}).get("price") or ""
+
+
+def _render_item_lines(items: list[dict], is_hotel: bool = False) -> list[str]:
+    lines = []
+    for it in items:
+        name = _item_name(it)
+        if not name:
+            continue
+        line = f"- **{name}**"
+        if is_hotel:
+            price = _item_price(it)
+            if price:
+                line += f"  {price}"
+        else:
+            addr = _item_address(it)
+            if addr:
+                line += f"  {addr}"
+        url = _item_url(it)
+        if url:
+            label = "查看 / 预订" if is_hotel else "购票 / 详情"
+            line += f"  [{label}]({url})"
+        lines.append(line)
+    return lines
+
+
 def _render(city: str, days: int, pois: list, hotels: list) -> str:
     itin = build_itinerary(city, days, pois, hotels)
     script = gen_script(city, itin)
@@ -41,40 +86,52 @@ def _render(city: str, days: int, pois: list, hotels: list) -> str:
     md: list[str] = []
     md.append(f"# {city} {days} 日游 · 游纪 AI 生成")
     md.append("")
-    md.append("## 真实数据快照（飞猪实时）")
-    md.append(f"- 景点命中：{len(pois)} 个")
-    md.append(f"- 酒店命中：{len(hotels)} 个")
-
-    if pois:
-        md.append("")
-        md.append("### 推荐景点")
-        for p in pois[:8]:
-            name = p.get("name") or (p.get("info") or {}).get("title")
-            addr = p.get("address") or ""
-            url = p.get("jumpUrl") or (p.get("info") or {}).get("jumpUrl") or ""
-            if not name:
-                continue
-            line = f"- **{name}**" + (f"  {addr}" if addr else "")
-            if url:
-                line += f"  [购票]({url})"
-            md.append(line)
-
-    if hotels:
-        md.append("")
-        md.append("### 推荐酒店")
-        for h in hotels[:5]:
-            name = h.get("name") or (h.get("info") or {}).get("title")
-            price = h.get("price") or (h.get("info") or {}).get("price") or ""
-            url = h.get("detailUrl") or (h.get("info") or {}).get("jumpUrl") or ""
-            if not name:
-                continue
-            line = f"- **{name}**" + (f"  {price}" if price else "")
-            if url:
-                line += f"  [查看]({url})"
-            md.append(line)
-
+    md.append("> 生成结构：短视频口播脚本 → 脚本提到的景点 / 酒店 → 补充景点 / 酒店")
     md.append("")
+
+    # 1. 脚本
     md.append(script)
+    md.append("")
+
+    # 2. 脚本提到的资源
+    md.append("## 脚本中提到的景点（飞猪实时）")
+    script_pois = []
+    for d in itin["daily"]:
+        script_pois.extend(d["script_spots"])
+    lines = _render_item_lines(script_pois, is_hotel=False)
+    if lines:
+        md.extend(lines)
+    else:
+        md.append("- 暂无")
+    md.append("")
+
+    md.append("## 脚本中提到的酒店（飞猪实时）")
+    lines = _render_item_lines(itin["script_hotels"], is_hotel=True)
+    if lines:
+        md.extend(lines)
+    else:
+        md.append("- 暂无")
+    md.append("")
+
+    # 3. 补充资源
+    md.append("## 补充景点")
+    extra_pois = []
+    for d in itin["daily"]:
+        extra_pois.extend(d["extra_spots"])
+    lines = _render_item_lines(extra_pois, is_hotel=False)
+    if lines:
+        md.extend(lines)
+    else:
+        md.append("- 暂无")
+    md.append("")
+
+    md.append("## 补充酒店")
+    lines = _render_item_lines(itin["extra_hotels"], is_hotel=True)
+    if lines:
+        md.extend(lines)
+    else:
+        md.append("- 暂无")
+
     return "\n".join(md)
 
 
