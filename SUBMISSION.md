@@ -32,12 +32,14 @@ sin0317（刘峻豪，个人参赛）
 
 ## 效果展示
 
+- **在线演示地址（公网可访问）**：https://travelcontent-ai.app.workbuddy.host/ —— 打开即见「开封 2 日游」真实产出（景点 + 酒店真实价格 + 短视频口播脚本），基于飞猪实时数据。
 - 百炼运行截图：⚠️ 建议补充一张「在百炼 Managed Agent 中输入『开封 2 日游』并生成行程 + 脚本」的运行截图（部署步骤见 `agent/agent-config.md`）。
 - 真实数据示例（本地工程产出）：见仓库 `demo/sample_output.md` —— 开封 2 日游，含清明上河园、开封城墙等 4 个真实景点（地址 + 购票链接）+ 10 家真实酒店（含价格）。
 - 演示视频（强烈推荐）：⚠️ 待补充录屏。
 
 ## 项目链接与复现方式
 
+- **在线演示（公网）**：https://travelcontent-ai.app.workbuddy.host/
 - GitHub 仓库：https://github.com/sin0317/travelcontent-ai
 - 本地复现步骤：
   1. `git clone https://github.com/sin0317/travelcontent-ai.git && cd travelcontent-ai`

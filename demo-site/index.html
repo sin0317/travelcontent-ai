@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>游纪 · AI 旅行内容官 — 2026 飞猪 AI 旅行创新大赛</title>
+<style>
+  :root{
+    --bg:#0f1220; --card:#171b2e; --card2:#1d2238; --line:#2a3150;
+    --txt:#eef1fb; --sub:#a9b1d0; --accent:#ff6a3d; --accent2:#4f8cff;
+    --ok:#39d98a; --warn:#ffcf5c;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+    background:radial-gradient(1200px 600px at 80% -10%,rgba(79,140,255,.18),transparent),
+               radial-gradient(900px 500px at 0% 0%,rgba(255,106,61,.16),transparent),var(--bg);
+    color:var(--txt);line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:980px;margin:0 auto;padding:32px 20px 72px}
+  header.hero{text-align:center;padding:40px 0 28px}
+  .badge{display:inline-block;font-size:13px;color:var(--accent);border:1px solid var(--line);
+    background:var(--card);padding:5px 14px;border-radius:999px;letter-spacing:.5px}
+  h1{font-size:38px;margin:16px 0 8px;letter-spacing:1px}
+  h1 .en{color:var(--sub);font-size:22px;font-weight:500}
+  .lead{color:var(--sub);max-width:680px;margin:0 auto;font-size:15px}
+  .cta{margin-top:18px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  .btn{display:inline-block;text-decoration:none;font-size:14px;padding:11px 20px;border-radius:10px;
+    border:1px solid var(--line);background:var(--card);color:var(--txt);transition:.2s}
+  .btn:hover{border-color:var(--accent2);transform:translateY(-1px)}
+  .btn.primary{background:linear-gradient(135deg,var(--accent),#ff8a5c);border:none;color:#1a1206;font-weight:700}
+  section{margin-top:36px}
+  .sec-h{font-size:13px;letter-spacing:2px;color:var(--accent2);text-transform:uppercase;margin-bottom:14px}
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 18px}
+  .card h3{font-size:16px;margin-bottom:6px}
+  .card p{color:var(--sub);font-size:14px}
+  .tag{font-size:12px;color:var(--ok);margin-right:6px}
+  .demo{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;margin-top:8px}
+  .snap{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 18px}
+  .pill{background:var(--card2);border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:13px}
+  .pill b{color:var(--accent)}
+  h4{font-size:15px;margin:20px 0 10px;color:var(--txt);border-left:3px solid var(--accent);padding-left:10px}
+  ul.items{list-style:none}
+  ul.items li{background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:11px 14px;margin:8px 0;font-size:14px}
+  ul.items li .meta{color:var(--sub);font-size:13px}
+  ul.items li a{color:var(--accent2);text-decoration:none;font-size:13px;margin-left:8px}
+  ul.items li a:hover{text-decoration:underline}
+  .script{background:var(--card2);border:1px dashed var(--line);border-radius:12px;padding:18px;font-size:14px}
+  .script .line{margin:10px 0}
+  .script .k{color:var(--warn);font-weight:700}
+  .script blockquote{color:var(--sub);border-left:3px solid var(--accent2);padding-left:12px;margin:6px 0;font-style:italic}
+  .note{color:var(--sub);font-size:13px;margin-top:10px}
+  footer{margin-top:48px;text-align:center;color:var(--sub);font-size:13px;border-top:1px solid var(--line);padding-top:22px}
+  footer a{color:var(--accent2);text-decoration:none}
+  @media(max-width:680px){.grid{grid-template-columns:1fr}h1{font-size:30px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <span class="badge">2026 飞猪 AI 旅行创新大赛 · 参赛作品</span>
+    <h1>游纪 · AI 旅行内容官 <span class="en">TravelContent AI</span></h1>
+    <p class="lead">输入目的地 + 天数，基于<b style="color:var(--txt)">飞猪实时真实数据</b>，一键生成「可执行行程 + 可拍成短视频的旅行口播脚本」。真实数据，内容化输出，专为文旅与短视频创作人群打造。</p>
+    <div class="cta">
+      <a class="btn primary" href="https://github.com/sin0317/travelcontent-ai" target="_blank" rel="noopener">★ GitHub 仓库</a>
+      <a class="btn" href="https://opc.aliyun.com/feizhu" target="_blank" rel="noopener">大赛官网</a>
+    </div>
+  </header>
+
+  <section>
+    <div class="sec-h">核心能力</div>
+    <div class="grid">
+      <div class="card"><h3><span class="tag">✓</span>真实数据底座</h3><p>景点 / 门票 / 酒店 / 机票全部来自飞猪 Fliggy MCP 实时返回，绝不臆造。</p></div>
+      <div class="card"><h3><span class="tag">✓</span>内容化输出（差异化）</h3><p>不止给列表，把真实数据编排成「行程 + 短视频口播脚本」，直连抖音 / B站 / 小红书创作流。</p></div>
+      <div class="card"><h3><span class="tag">✓</span>双形态交付</h3><p>阿里云百炼 Managed Agent（开箱即用）+ 本地可跑 Python 工程（零模型依赖，便于复现）。</p></div>
+      <div class="card"><h3><span class="tag">✓</span>文旅契合</h3><p>默认以历史古迹等类别切入，适配开封、西安、杭州等古城 / 文旅城市。</p></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-h">真实产出演示 · 开封 2 日游</div>
+    <div class="demo">
+      <div class="snap">
+        <span class="pill">景点命中 <b>4</b> 个</span>
+        <span class="pill">酒店命中 <b>10</b> 个</span>
+        <span class="pill">数据来源 <b>飞猪实时</b></span>
+      </div>
+
+      <h4>推荐景点（真实数据）</h4>
+      <ul class="items">
+        <li><b>开封城墙</b> <span class="meta">河南省开封市龙亭区西门大街198号</span><a href="https://router.feizhu.com/multi/webview?url=https%3A%2F%2Frouter.feizhu.com%2Fws%2F0sQUB6" target="_blank" rel="noopener">购票</a></li>
+        <li><b>山陕甘会馆</b> <span class="meta">河南省开封市龙亭区北书店街道徐府街85号附1号</span><a href="https://router.feizhu.com/multi/webview?url=https%3A%2F%2Frouter.feizhu.com%2Fws%2F2DJsBT" target="_blank" rel="noopener">购票</a></li>
+        <li><b>朱仙镇启封故园</b> <span class="meta">河南省开封市祥符区运粮河桥</span><a href="https://router.feizhu.com/multi/webview?url=https%3A%2F%2Frouter.feizhu.com%2Fws%2F3xP2Mw" target="_blank" rel="noopener">购票</a></li>
+        <li><b>刘家胡同</b> <span class="meta">河南省开封市顺河回族区</span><a href="https://router.feizhu.com/multi/webview?url=https%3A%2F%2Frouter.feizhu.com%2Fws%2F1yS12G" target="_blank" rel="noopener">购票</a></li>
+      </ul>
+
+      <h4>推荐酒店（真实价格）</h4>
+      <ul class="items">
+        <li><b>开封新东苑大酒店</b> <span class="meta">¥217</span><a href="https://router.feizhu.com/multi/webview?url=https%3A%2F%2Frouter.feizhu.com%2Fws%2F2YQCr0" target="_blank" rel="noopener">查看</a></li>
+        <li><b>开封尉氏县金沙湾国际酒店</b> <span class="meta">¥314</span><a href="https://router.feizhu.com/multi/webview?url=https%3A%2F%2Frouter.feizhu.com%2Fws%2F1nPvUT" target="_blank" rel="noopener">查看</a></li>
+        <li><b>建业思桐尚院民宿</b> <span class="meta">¥190</span><a href="https://router.feizhu.com/multi/webview?url=https%3A%2F%2Frouter.feizhu.com%2Fws%2F0q5mEC" target="_blank" rel="noopener">查看</a></li>
+        <li><b>开封清明上河园河南大学亚朵酒店</b> <span class="meta">¥399</span><a href="https://router.feizhu.com/multi/webview?url=https%3A%2F%2Frouter.feizhu.com%2Fws%2F4AlRP7" target="_blank" rel="noopener">查看</a></li>
+        <li><b>东景国际酒店（开封尉氏开发区店）</b> <span class="meta">¥290</span><a href="https://router.feizhu.com/multi/webview?url=https%3A%2F%2Frouter.feizhu.com%2Fws%2F3EQ1Bl" target="_blank" rel="noopener">查看</a></li>
+      </ul>
+
+      <h4>短视频口播脚本（可直接拍）</h4>
+      <div class="script">
+        <div class="line"><span class="k">开场钩子（0-5s）：</span>"开封到底怎么玩才不踩坑？收藏这条，2天帮你安排得明明白白。"</div>
+        <blockquote>第 1 天 · 主打开封城墙、朱仙镇启封故园——实拍打卡 + 飞猪购票链接放评论区，边玩边省。</blockquote>
+        <blockquote>第 2 天 · 主打山陕甘会馆、刘家胡同——实拍打卡 + 飞猪购票链接放评论区，边玩边省。</blockquote>
+        <div class="line"><span class="k">住哪儿：</span>开封新东苑大酒店、金沙湾国际酒店、建业思桐尚院民宿 都是飞猪高分推荐，链接同款放评论区。</div>
+        <div class="line"><span class="k">结尾 CTA（最后 5s）：</span>"数据来自飞猪实时库存，价格随时变，点我主页看更多开封玩法。"</div>
+      </div>
+      <p class="note">↑ 以上为「游纪」基于飞猪实时数据自动生成的真实示例。接入百炼大模型后，口播脚本可升级为更具个性化的 AI 生成版本。</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-h">如何运行 / 复现</div>
+    <div class="grid">
+      <div class="card">
+        <h3>本地工程（零模型依赖）</h3>
+        <p>① <code>git clone</code> 仓库 → ② <code>npm i @fly-ai/flyai-cli</code> → ③ 填 <code>FLYAI_API_KEY</code> 到 <code>.env</code> → ④ <code>python src/cli.py 开封 --days 2 --category 历史古迹</code></p>
+      </div>
+      <div class="card">
+        <h3>阿里云百炼 Managed Agent</h3>
+        <p>装 <code>alibaba-flyai/flyai-skill</code> → 贴 <code>prompts/system_prompt.md</code> → 配 <code>FLYAI_API_KEY</code> → 直接对话产出行程 + 脚本。详见 <code>agent/agent-config.md</code>。</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    游纪 · AI 旅行内容官 · 2026 飞猪 AI 旅行创新大赛参赛作品 ·
+    <a href="https://github.com/sin0317/travelcontent-ai" target="_blank" rel="noopener">sin0317/travelcontent-ai</a><br/>
+    基于飞猪实时数据生成 · 不提交任何 API Key / 敏感信息
+  </footer>
+
+</div>
+</body>
+</html>
